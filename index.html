@@ -25,6 +25,7 @@
       }
       .main-body {
         display: flex;
+        position: relative;
         width: 300px;
         height: 255px;
         flex-wrap: wrap;
@@ -64,6 +65,7 @@
         height: 100px;
         width: 250px;
         border-radius: 20px;
+        border: 2px #ffadad solid;
       }
       .box:nth-child(1) {
         border-width: 0px 2px 2px 0px;
@@ -97,9 +99,10 @@
         height: 3px;
         background-color: #a12d2d;
         position: absolute;
-        top: 366px;
-        left: 416px;
+        top: 127.5px;
+        left: 15px;
         transform: rotate(0deg);
+        visibility: hidden;
       }
     </style>
   </head>
@@ -118,18 +121,18 @@
         </div>
       </div>
       <div class="main-body">
-        <div class="box" data-row="1" data-col="1" data-clicked="false">11</div>
-        <div class="box" data-row="1" data-col="2" data-clicked="false">12</div>
-        <div class="box" data-row="1" data-col="3" data-clicked="false">13</div>
-        <div class="box" data-row="2" data-col="1" data-clicked="false">21</div>
-        <div class="box" data-row="2" data-col="2" data-clicked="false">22</div>
-        <div class="box" data-row="2" data-col="3" data-clicked="false">23</div>
-        <div class="box" data-row="3" data-col="1" data-clicked="false">31</div>
-        <div class="box" data-row="3" data-col="2" data-clicked="false">32</div>
-        <div class="box" data-row="3" data-col="3" data-clicked="false">33</div>
+        <div class="box" data-row="1" data-col="1" data-clicked="false"></div>
+        <div class="box" data-row="1" data-col="2" data-clicked="false"></div>
+        <div class="box" data-row="1" data-col="3" data-clicked="false"></div>
+        <div class="box" data-row="2" data-col="1" data-clicked="false"></div>
+        <div class="box" data-row="2" data-col="2" data-clicked="false"></div>
+        <div class="box" data-row="2" data-col="3" data-clicked="false"></div>
+        <div class="box" data-row="3" data-col="1" data-clicked="false"></div>
+        <div class="box" data-row="3" data-col="2" data-clicked="false"></div>
+        <div class="box" data-row="3" data-col="3" data-clicked="false"></div>
+        <div class="line"></div>
       </div>
     </div>
-    <div class="line"></div>
     <script src="./index.js"></script>
   </body>
 </html>
