@@ -3,14 +3,55 @@ obj1 = {
   selectedbox: [],
 };
 obj2 = {
-  name: "user-2",
+  name: "Computer",
   selectedbox: [],
 };
 let isObj1 = true;
 wins = false;
 let user_1_sign = "X";
 let user_2_sign = "O";
-
+const crossedList = [
+  [
+    [1, 1],
+    [1, 2],
+    [1, 3],
+  ],
+  [
+    [2, 1],
+    [2, 2],
+    [2, 3],
+  ],
+  [
+    [3, 1],
+    [3, 2],
+    [3, 3],
+  ],
+  [
+    [1, 1],
+    [2, 1],
+    [3, 1],
+  ],
+  [
+    [1, 2],
+    [2, 2],
+    [3, 2],
+  ],
+  [
+    [1, 3],
+    [2, 3],
+    [3, 3],
+  ],
+  [
+    [1, 1],
+    [2, 2],
+    [3, 3],
+  ],
+  [
+    [3, 1],
+    [2, 2],
+    [1, 3],
+  ],
+];
 const inputContainer = document.querySelector(".input-container");
 const winnerContainer = document.querySelector(".winner-container");
 const mainBody = document.querySelector(".main-body");
@@ -29,7 +70,7 @@ const sign = document.querySelectorAll(".sign");
 const playBtn = document.querySelector(".play");
 const backBtn = document.querySelector(".back");
 const first_user_input = document.getElementById("user-1-name");
-const second_user_input = document.getElementById("user-2-name");
+//   const second_user_input = document.getElementById("user-2-name");
 const playAgain = document.querySelector(".playagain");
 const backWinner = document.querySelector(".back_winner");
 let winnerName = document.querySelector(".winner-name");
@@ -54,19 +95,9 @@ mainBody.addEventListener("click", (e) => {
       obj1.selectedbox.push([e.target.dataset.row, e.target.dataset.col]);
       e.target.innerHTML = user_1_sign;
       isObj1 = false;
-      time_func();
+      // time_func();
       if (obj1.selectedbox.length >= 3) {
         crossArray(obj1.selectedbox, user_1.innerHTML);
-      }
-    } else if (wins == false && sleep == false) {
-      e.target.dataset.clicked = "true";
-      clearInterval(interval);
-      obj2.selectedbox.push([e.target.dataset.row, e.target.dataset.col]);
-      isObj1 = true;
-      e.target.innerHTML = user_2_sign;
-      time_func();
-      if (obj2.selectedbox.length >= 3) {
-        crossArray(obj2.selectedbox, user_2.innerHTML);
       }
     }
 
@@ -138,7 +169,7 @@ playBtn.addEventListener("click", (e) => {
     inputContainer.style.display = "none";
     user_1.innerHTML = first_user_input.value;
     user_2.innerHTML = second_user_input.value;
-    time_func();
+    //   time_func();
   }
   if (first_user_input.value.trim().length > 7) {
     first_user_input.value = "";
@@ -177,7 +208,7 @@ playAgain.addEventListener("click", (e) => {
   winnerContainer.style.zIndex = "-4";
   winnerCard.style.opacity = "0";
   clear();
-  time_func();
+  // time_func();
 });
 function crossArray(selectedbox, user) {
   let output = [];
@@ -300,7 +331,7 @@ function resetGame() {
   score_1.innerHTML = score1;
   score_2.innerHTML = score2;
   clearInterval(interval);
-  time_func();
+  // time_func();
   isObj1 = true;
   clear();
 }
@@ -350,20 +381,18 @@ function time_func() {
     rect[0].style.visibility = "hidden";
     rect[1].style.visibility = "visible";
   }
-  if(wins == false){
-    timer();
-  }
-  else{
+  if (wins == false) {
+    //   timer();
+  } else {
     rect[0].style.visibility = "hidden";
     rect[1].style.visibility = "hidden";
-    
   }
 }
 function timer() {
   s = 11;
   interval = setInterval(() => {
     s--;
-    if(wins == true){
+    if (wins == true) {
       rect[0].style.visibility = "hidden";
       rect[1].style.visibility = "hidden";
       clearInterval(interval);
@@ -373,9 +402,9 @@ function timer() {
     } else {
       timeSpan.innerHTML = "Times Up!";
       sleep = true;
-      isObj1=(isObj1)?false:true;
+      isObj1 = isObj1 ? false : true;
       clearInterval(interval);
-      timesUp();
+      // timesUp();
     }
     if (isObj1 == true && s >= 0 && wins == false) {
       rect[0].style.transition = "all 1s linear";
@@ -391,7 +420,6 @@ function timer() {
   }, 1000);
 }
 function timesUp() {
-  console.log("hele");
   setTimeout(() => {
     sleep = false;
     if (!isObj1) {
@@ -404,6 +432,21 @@ function timesUp() {
       rect[1].style.visibility = "hidden";
     }
     clearInterval(interval);
-    timer();
+    //   timer();
   }, 3000);
+}
+
+function computerClick() {
+  if (wins == false && sleep == false) {
+    
+    e.target.dataset.clicked = "true";
+    clearInterval(interval);
+    obj2.selectedbox.push([e.target.dataset.row, e.target.dataset.col]);
+    isObj1 = true;
+    e.target.innerHTML = user_2_sign;
+    // time_func();
+    if (obj2.selectedbox.length >= 3) {
+      crossArray(obj2.selectedbox, user_2.innerHTML);
+    }
+  }
 }
