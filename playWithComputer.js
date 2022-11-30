@@ -6,7 +6,9 @@ obj2 = {
   name: "Computer",
   selectedbox: [],
 };
-let isObj1 = true;
+let isObj1 = false;
+let sleep = false;
+
 wins = false;
 let user_1_sign = "X";
 let user_2_sign = "O";
@@ -79,13 +81,58 @@ let winnerCard = document.querySelector(".winner_card");
 let score1 = 0;
 let score2 = 0;
 let interval;
-let sleep = false;
+
 
 const rect = document.querySelectorAll(".rectangular");
 rect[0].style.visibility = "hidden";
 rect[1].style.visibility = "hidden";
 const timeSpan = document.querySelector(".timeSpan");
 
+// for computer
+let selectedBoxInCrossedList = new Map([  // is the opponent's selected box is in the elements of the crossedList
+    ["0", false],
+    ["1", false],
+    ["2", false],
+    ["3", false],
+    ["4", false],
+    ["5", false],
+    ["6", false],
+    ["7", false],
+  ]);
+  let probableChosenList = new Map();   // 0:(index of the list in crossedList)
+  let elCount = new Map(); //number of element that are already selected are in the chosen list // (index of the list in crossedList):count
+  // for defensing an attack
+  let nextMoveFoundDef = new Map([["0", false],["1", false],["2", false],["3", false],["4", false],["5", false],["6", false],["7", false],]);
+  // for attacking  // for which move the computer will be the winner  
+  let nextMoveFoundAtk = new Map([["0", false],["1", false],["2", false],["3", false],["4", false],["5", false],["6", false],["7", false],]);
+  let countSelectedbox1 = 0; 
+  let countSelectedbox2 = 0; 
+
+  let selectedbox1 = [
+    [2, 2],
+    [2, 1],
+    [1, 3],
+    [3, 2]
+  ];
+  let selectedbox2 = [
+    [1, 2],
+    [2, 3],
+    [3, 1]
+  ];
+  let cornerBoxes = [[1, 1], [1, 3], [3, 1], [3, 3]];
+  let middleBox = [[2, 2]];
+  let middleSideBox = [[1, 2], [2, 1], [2, 3], [3, 2]];
+  let option = [];
+  let hasElementInSelectedbox1 = false;
+  let hasElementInSelectedbox2 = false;
+  let nextMoveFound = false;
+  let trickfordef = false;
+  let nextMoveDone = false;
+  let count = 0;
+  let index = 0;
+  let n = 0;
+  let r, c;
+  computerRun();
 mainBody.addEventListener("click", (e) => {
   console.log([e.target.dataset.row, e.target.dataset.col]);
   if (e.target.dataset.clicked === "false") {
@@ -100,7 +147,8 @@ mainBody.addEventListener("click", (e) => {
         crossArray(obj1.selectedbox, user_1.innerHTML);
       }
     }
-
+    
+    computerRun();
     console.log(obj1.selectedbox);
     console.log(obj2.selectedbox);
   }
@@ -109,6 +157,7 @@ mainBody.addEventListener("click", (e) => {
     winnerfound("none", 1);
   }
 });
+
 reset.addEventListener("click", (e) => {
   resetGame();
 });
@@ -190,6 +239,10 @@ playBtn.addEventListener("click", (e) => {
     user_1_sign_span.innerHTML = "O";
     user_2_sign = "X";
     user_2_sign_span.innerHTML = "X";
+  }
+  if(!isObj1){
+    computerRun();
+
   }
 });
 playAgain.addEventListener("mouseup", (e) => {
@@ -437,16 +490,253 @@ function timesUp() {
 }
 
 function computerClick() {
+  // console.log("computer clicked", option);
   if (wins == false && sleep == false) {
-    
-    e.target.dataset.clicked = "true";
+    row = option[0][0];
+    col = option[0][1];
+    box[(row-1)*3+col-1].dataset.clicked = "true";
     clearInterval(interval);
-    obj2.selectedbox.push([e.target.dataset.row, e.target.dataset.col]);
+    obj2.selectedbox.push([row, col]);
     isObj1 = true;
-    e.target.innerHTML = user_2_sign;
+    box[(row-1)*3+col-1].innerHTML = user_2_sign;
+    option = [];
+    nextMoveDone = false;
+    nextMoveFound = false;
     // time_func();
     if (obj2.selectedbox.length >= 3) {
-      crossArray(obj2.selectedbox, user_2.innerHTML);
+      crossArray(obj2.selectedbox, obj2.name);
+    }
+  }
+}
+
+function computerRun(){
+  if((obj1.selectedbox.length+obj2.selectedbox.length+1) == 1){
+    n = Math.floor(Math.random()*cornerBoxes.length);
+    option.push(cornerBoxes[n]);
+    // console.log(option);
+    nextMoveDone = true;
+  }
+  else if((obj1.selectedbox.length+obj2.selectedbox.length+1) == 3){
+    if(inSelectedbox(obj1.selectedbox[0], middleBox) && inSelectedbox(obj2.selectedbox[0], cornerBoxes)){
+      if(obj2.selectedbox[0].toString().localeCompare('1,1')==0){
+        // console.log(selectedbox2[0].toString().localeCompare('1,1'));
+        option.push([3, 3]);
+      }
+      else if(obj2.selectedbox[0].toString().localeCompare('1,3')==0){
+        option.push([3, 1]);
+      }
+      else if(obj2.selectedbox[0].toString().localeCompare('3,1')==0){
+        option.push([1, 3]);
+      }
+      else if(obj2.selectedbox[0].toString().localeCompare('3,3')==0){
+        option.push([1, 1]);
+      }
+      nextMoveDone = true;
+    }
+    else{
+      if(obj1.selectedbox[0][0]==obj2.selectedbox[0][0]){
+        c = obj2.selectedbox[0][1];
+        r = (obj2.selectedbox[0][0]==3)?1:3;
+        option.push([r, c])
+      }
+      else if(obj1.selectedbox[0][1]==obj2.selectedbox[0][1]){
+        r = obj2.selectedbox[0][0];
+        c = (obj2.selectedbox[0][1]==3)?1:3;
+        option.push([r, c])
+      }
+      else{
+        if(Math.floor(Math.random()*2)==1){
+          r = obj2.selectedbox[0][0];
+          c = (obj2.selectedbox[0][1]==3)?1:3;
+          option.push([r, c])
+        }
+        else{
+          r = (obj2.selectedbox[0][0]==3)?1:3;
+          c = obj2.selectedbox[0][1];
+          option.push([r, c])
+        }
+      }
+    }
+    // console.log(option);
+  }
+  else if((obj1.selectedbox.length+obj2.selectedbox.length+1)==2){
+    if(inSelectedbox(obj1.selectedbox[0], cornerBoxes)){
+      option.push([2, 2]);
+      console.log(option);
+      nextMoveDone =true;
+    }
+  }
+  else if((obj1.selectedbox.length+obj2.selectedbox.length+1) == 4){
+    console.log("444")
+    checkAtkDef();
+    console.log(option);
+    if(inSelectedbox(obj1.selectedbox[1], cornerBoxes && !nextMoveDone)){
+      n = Math.floor(Math.random()*cornerBoxes.length);
+      option.push(cornerBoxes[n]);
+      // console.log(option);
+      nextMoveDone = true;
+    }
+  }
+  if(!nextMoveDone){
+    checkAtkDef();
+    if (!nextMoveFound && probableChosenList.size!=0) {
+      for (let i = 0; i < probableChosenList.size; i++) {
+        // console.log("probable", crossedList[probableChosenList.get(`${i}`)]);
+        count = 0;
+        // console.log(crossedList[probableChosenList.get(`${i}`)], i);
+    
+        for (let p = 0;p < crossedList[probableChosenList.get(`${i}`)].length;p++) {
+    
+          for (let q = 0; q < obj2.selectedbox.length; q++) {
+            if (
+              crossedList[probableChosenList.get(`${i}`)][p]
+                .toString()
+                .localeCompare(obj2.selectedbox[q].toString()) == 0
+            ) {
+              // console.log(crossedList[i][p])
+              count++;
+            }
+          }
+    
+        }
+    
+        index = probableChosenList.get(`${i}`);
+        elCount.set(`${index}`, count);
+      }
+      let maxIndex = probableChosenList.get('0');
+      let maximum = elCount.get(`${maxIndex}`);
+    
+      for(let i = 1; i<probableChosenList.size;i++){
+        index = probableChosenList.get(`${i}`);
+        if(elCount.get(`${index}`) > maximum){
+            maxIndex = index;
+            maximum = elCount.get(`${index}`);
+        }
+      }
+    
+      nextMove(crossedList[maxIndex]);
+      // console.log(maxIndex, maximum);
+    }
+    else if(!nextMoveFound){
+      option.push(emptyBox());
+      // console.log("option list", option);
+      nextMoveFound = true;
+    }
+  }
+  computerClick();
+}
+function nextMove(chosenList) {
+  // let option = [];
+  let result;
+  let hasElementInSelectedbox1 = false;
+  let hasElementInSelectedbox2 = false;
+  for (let i = 0; i < chosenList.length; i++) {
+    hasElementInSelectedbox1 = inSelectedbox(chosenList[i], obj1.selectedbox);
+    hasElementInSelectedbox2 = inSelectedbox(chosenList[i], obj2.selectedbox);
+    if (hasElementInSelectedbox1 == false && hasElementInSelectedbox2 == false) {
+      option.push(chosenList[i]);
+      nextMoveDone = true;
+    }
+  }
+  if(option.length>=2){
+      result = mostEffectiveMove();
+  }
+  if(option.length != 0 && result==undefined){
+    // console.log(chosenList);
+    // console.log(`in the function: ${option}`);
+    nextMoveFound = true;
+  }
+  
+  // console.log("next move found", nextMoveFound);
+}
+
+//this below function finds a move that is common to two probable list
+function mostEffectiveMove(){
+  let index = 0;
+  let index1 = 0;
+  for(let i=0;i<elCount.size;i++){
+    index = probableChosenList.get(`${i}`);
+    for(let j = 0; j<elCount.size;j++){
+      index1 = probableChosenList.get(`${j}`);
+      if(elCount.get(`${index}`) != 0 && elCount.get(`${index1}`)!=0 && i!=j && j!=(i-1)){
+        for(let k =0;k<3;k++){
+          for(let p = 0;p<3;p++){
+            if(!inSelectedbox(crossedList[index][k], obj1.selectedbox) && !inSelectedbox(crossedList[index][k], obj2.selectedbox) && !inSelectedbox(crossedList[index1][p], obj1.selectedbox) && !inSelectedbox(crossedList[index1][p], obj2.selectedbox)){
+              if(crossedList[index][k].toString().localeCompare(crossedList[index1][p].toString()) == 0 ){
+                // console.log(crossedList[index][k]);
+                return crossedList[index][k];
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  return undefined;
+}
+function inSelectedbox(element, selectedbox){
+  for (let j = 0; j < selectedbox.length; j++) {
+    if (
+      element.toString().localeCompare(selectedbox[j].toString()) == 0 
+      ) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function checkAtkDef(){
+  for (let i = 0; i < crossedList.length; i++) {
+    countSelectedbox1 = 0;
+    countSelectedbox2 = 0;
+    for (let j = 0; j < crossedList[i].length; j++) {
+      for (let k = 0; k < obj1.selectedbox.length; k++) {
+  
+        if (crossedList[i][j].toString().localeCompare(obj1.selectedbox[k].toString()) == 0) {
+          selectedBoxInCrossedList.set(`${i}`, true);
+          countSelectedbox1++;
+          if (countSelectedbox1 == 2) {
+            nextMoveFoundDef.set(`${i}`,true);
+          }
+        }
+      }
+  
+      for (let k = 0; k < obj2.selectedbox.length; k++){
+        if(crossedList[i][j].toString().localeCompare(obj2.selectedbox[k].toString()) == 0){
+          countSelectedbox2++;
+          if (countSelectedbox2 == 2) {
+            nextMoveFoundAtk.set(`${i}`,true);
+          }
+        }
+      }
+    }
+    if (selectedBoxInCrossedList.get(`${i}`) == false) {
+      probableChosenList.set(`${index}`, i);
+      index++;
+    }
+  }
+  // first, checking if there is any wining move
+  if(!nextMoveFound){
+    for(let j=0;j<8;j++){
+      if(nextMoveFoundAtk.get(`${j}`)==true){
+        console.log("attacking");
+        nextMove(crossedList[j]);
+      }
+      if(nextMoveFound){
+        break;
+      }
+    }
+  }
+  if(!nextMoveFound){
+    // checking if there is any wining move of the opponent that need to be defensed
+    for(let j=0;j<8;j++){
+      if(nextMoveFoundDef.get(`${j}`)==true){
+        console.log("defensing");
+        nextMove(crossedList[j]);
+      }
+      if(nextMoveFound){
+        break;
+      }
     }
   }
 }

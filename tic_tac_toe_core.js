@@ -71,15 +71,14 @@ const crossedList = [
   // ];
   
   let selectedbox1 = [
-    [2, 2],
-    [2, 1],
+    [1, 1],
     [1, 3],
-    [3, 2]
+    [2, 3]
+
   ];
   let selectedbox2 = [
-    [1, 2],
-    [2, 3],
-    [3, 1]
+    [2, 2],
+    [1, 2]
   ];
   let cornerBoxes = [[1, 1], [1, 3], [3, 1], [3, 3]];
   let middleBox = [[2, 2]];
@@ -147,11 +146,12 @@ const crossedList = [
     if(inSelectedbox(selectedbox1[0], cornerBoxes)){
       option.push([2, 2]);
       console.log(option);
-      nextMoveDone =true;
+      nextMoveDone = true;
     }
   }
   else if((selectedbox1.length+selectedbox2.length+1) == 4){
-    if(inSelectedbox(selectedbox1[1], cornerBoxes)){
+    checkAtkDef()
+    if(inSelectedbox(selectedbox1[1], cornerBoxes) && !nextMoveDone){
       n = Math.floor(Math.random()*cornerBoxes.length);
       option.push(cornerBoxes[n]);
       console.log(option);
@@ -159,59 +159,7 @@ const crossedList = [
     }
   }
   if(!nextMoveDone){
-    for (let i = 0; i < crossedList.length; i++) {
-      countSelectedbox1 = 0;
-      countSelectedbox2 = 0;
-      for (let j = 0; j < crossedList[i].length; j++) {
-        for (let k = 0; k < selectedbox1.length; k++) {
-    
-          if (crossedList[i][j].toString().localeCompare(selectedbox1[k].toString()) == 0) {
-            selectedBoxInCrossedList.set(`${i}`, true);
-            countSelectedbox1++;
-            if (countSelectedbox1 == 2) {
-              nextMoveFoundDef.set(`${i}`,true);
-            }
-          }
-        }
-    
-        for (let k = 0; k < selectedbox2.length; k++){
-          if(crossedList[i][j].toString().localeCompare(selectedbox2[k].toString()) == 0){
-            countSelectedbox2++;
-            if (countSelectedbox2 == 2) {
-              nextMoveFoundAtk.set(`${i}`,true);
-            }
-          }
-        }
-      }
-      if (selectedBoxInCrossedList.get(`${i}`) == false) {
-        probableChosenList.set(`${index}`, i);
-        index++;
-      }
-    }
-    // first, checking if there is any wining move
-    if(!nextMoveFound){
-      for(let j=0;j<8;j++){
-        if(nextMoveFoundAtk.get(`${j}`)==true){
-          console.log("attacking");
-          nextMove(crossedList[j]);
-        }
-        if(nextMoveFound){
-          break;
-        }
-      }
-    }
-    if(!nextMoveFound){
-      // checking if there is any wining move of the opponent that need to be defensed
-      for(let j=0;j<8;j++){
-        if(nextMoveFoundDef.get(`${j}`)==true){
-          console.log("defensing");
-          nextMove(crossedList[j]);
-        }
-        if(nextMoveFound){
-          break;
-        }
-      }
-    }
+    checkAtkDef();
     if (!nextMoveFound && probableChosenList.size!=0) {
       for (let i = 0; i < probableChosenList.size; i++) {
         // console.log("probable", crossedList[probableChosenList.get(`${i}`)]);
@@ -251,7 +199,6 @@ const crossedList = [
       console.log(maxIndex, maximum);
     }
     else if(!nextMoveFound){
-      console.log("option list", option);
       option.push(emptyBox());
       console.log("option list", option);
       nextMoveFound = true;
@@ -270,18 +217,20 @@ const crossedList = [
       hasElementInSelectedbox2 = inSelectedbox(chosenList[i], selectedbox2);
       if (hasElementInSelectedbox1 == false && hasElementInSelectedbox2 == false) {
         option.push(chosenList[i]);
+        nextMoveDone = true;
       }
     }
     if(option.length>=2){
         result = mostEffectiveMove();
     }
     if(option.length != 0 && result==undefined){
-      console.log(chosenList);
-      console.log(`in the function: ${option}`);
+      // console.log(chosenList);
+      // console.log(`in the function: ${option}`);
+      console.log(option);
       nextMoveFound = true;
     }
     
-    console.log("next move found", nextMoveFound);
+    // console.log("next move found", nextMoveFound);
   }
   
   //this below function finds a move that is common to two probable list
@@ -341,6 +290,62 @@ const crossedList = [
         }
         if(!inTheBox){
           return crossedList[i][j];
+        }
+      }
+    }
+  }
+
+  function checkAtkDef(){
+    for (let i = 0; i < crossedList.length; i++) {
+      countSelectedbox1 = 0;
+      countSelectedbox2 = 0;
+      for (let j = 0; j < crossedList[i].length; j++) {
+        for (let k = 0; k < selectedbox1.length; k++) {
+    
+          if (crossedList[i][j].toString().localeCompare(selectedbox1[k].toString()) == 0) {
+            selectedBoxInCrossedList.set(`${i}`, true);
+            countSelectedbox1++;
+            if (countSelectedbox1 == 2) {
+              nextMoveFoundDef.set(`${i}`,true);
+            }
+          }
+        }
+    
+        for (let k = 0; k < selectedbox2.length; k++){
+          if(crossedList[i][j].toString().localeCompare(selectedbox2[k].toString()) == 0){
+            countSelectedbox2++;
+            if (countSelectedbox2 == 2) {
+              nextMoveFoundAtk.set(`${i}`,true);
+            }
+          }
+        }
+      }
+      if (selectedBoxInCrossedList.get(`${i}`) == false) {
+        probableChosenList.set(`${index}`, i);
+        index++;
+      }
+    }
+    // first, checking if there is any wining move
+    if(!nextMoveFound){
+      for(let j=0;j<8;j++){
+        if(nextMoveFoundAtk.get(`${j}`)==true){
+          console.log("attacking");
+          nextMove(crossedList[j]);
+        }
+        if(nextMoveFound){
+          break;
+        }
+      }
+    }
+    if(!nextMoveFound){
+      // checking if there is any wining move of the opponent that need to be defensed
+      for(let j=0;j<8;j++){
+        if(nextMoveFoundDef.get(`${j}`)==true){
+          console.log("defensing");
+          nextMove(crossedList[j]);
+        }
+        if(nextMoveFound){
+          break;
         }
       }
     }
