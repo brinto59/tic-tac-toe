@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel="stylesheet" href="./playWithComputerStyle.css">
+    <link rel="stylesheet" href="./playWithFriendStyle.css">
   </head>
   <body>
     <div class="container">
@@ -18,8 +18,11 @@
             <rect x="10" y="10" rx="20" ry="20" class="rectangular" id ="rect1"/>
           </svg>
         </div>
+        <div class="timeCard">
+          <div class="timeSpan">01:00</div>
+        </div>
         <div class="playerCard">
-          <div>User-2:<span id="user_2">Computer</span></div>
+          <div>User-2:<span id="user_2">user7</span></div>
           <div>Score:<span id="score_2">0</span></div>
           <div>Sign: <span id="user_2_sign">O</span></div>
           <svg>
@@ -55,6 +58,16 @@
             <div class="O O-1 sign" data-checked="false">O</div>
           </div>
         </div>
+        <div class="user user-2">
+          <div class="user-input">
+            <label for="user-2-name">Second User Name:</label>
+            <input type="text" id="user-2-name"/>
+          </div>
+          <div class="X-O">
+            <div class="X X-2 sign" data-checked="false">X</div>
+            <div class="O O-2 sign" data-checked="true">O</div>
+          </div>
+        </div>
         <div class="button">
           <div class="play btn">Play</div>
           <div class="back btn">Back</div>
@@ -74,6 +87,6 @@
         </div>
       </div>
     </div>
-    <script defer src="./playWithComputer.js"></script>
+    <script defer src="./playWithFriend.js"></script>
   </body>
 </html>

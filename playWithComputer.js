@@ -6,7 +6,7 @@ obj2 = {
   name: "Computer",
   selectedbox: [],
 };
-let isObj1 = false;
+let isObj1 = true;
 let sleep = false;
 
 wins = false;
@@ -86,7 +86,7 @@ let interval;
 const rect = document.querySelectorAll(".rectangular");
 rect[0].style.visibility = "hidden";
 rect[1].style.visibility = "hidden";
-const timeSpan = document.querySelector(".timeSpan");
+
 
 // for computer
 let selectedBoxInCrossedList = new Map([  // is the opponent's selected box is in the elements of the crossedList
@@ -108,17 +108,7 @@ let selectedBoxInCrossedList = new Map([  // is the opponent's selected box is i
   let countSelectedbox1 = 0; 
   let countSelectedbox2 = 0; 
 
-  let selectedbox1 = [
-    [2, 2],
-    [2, 1],
-    [1, 3],
-    [3, 2]
-  ];
-  let selectedbox2 = [
-    [1, 2],
-    [2, 3],
-    [3, 1]
-  ];
+  
   let cornerBoxes = [[1, 1], [1, 3], [3, 1], [3, 3]];
   let middleBox = [[2, 2]];
   let middleSideBox = [[1, 2], [2, 1], [2, 3], [3, 2]];
@@ -132,9 +122,7 @@ let selectedBoxInCrossedList = new Map([  // is the opponent's selected box is i
   let index = 0;
   let n = 0;
   let r, c;
-  computerRun();
 mainBody.addEventListener("click", (e) => {
-  console.log([e.target.dataset.row, e.target.dataset.col]);
   if (e.target.dataset.clicked === "false") {
     if (isObj1 == true && wins == false && sleep == false) {
       e.target.dataset.clicked = "true";
@@ -142,7 +130,6 @@ mainBody.addEventListener("click", (e) => {
       obj1.selectedbox.push([e.target.dataset.row, e.target.dataset.col]);
       e.target.innerHTML = user_1_sign;
       isObj1 = false;
-      // time_func();
       if (obj1.selectedbox.length >= 3) {
         crossArray(obj1.selectedbox, user_1.innerHTML);
       }
@@ -153,13 +140,15 @@ mainBody.addEventListener("click", (e) => {
     console.log(obj2.selectedbox);
   }
   if (obj1.selectedbox.length + obj2.selectedbox.length == 9 && wins == false) {
-    console.log("Draw");
     winnerfound("none", 1);
   }
 });
 
 reset.addEventListener("click", (e) => {
   resetGame();
+  if(!isObj1){
+    computerRun();
+  }
 });
 X_O.forEach((element) => {
   element.addEventListener("click", (e) => {
@@ -169,24 +158,15 @@ X_O.forEach((element) => {
     ) {
       sign[0].dataset.checked = "true";
       sign[1].dataset.checked = "false";
-      sign[2].dataset.checked = "false";
-      sign[3].dataset.checked = "true";
       design(sign[0]);
-      design(sign[3]);
       removeDesign(sign[1]);
-      removeDesign(sign[2]);
     } else if (
-      e.target.classList.contains("O-1") ||
-      e.target.classList.contains("X-2")
+      e.target.classList.contains("O-1")
     ) {
       sign[0].dataset.checked = "false";
       sign[1].dataset.checked = "true";
-      sign[2].dataset.checked = "true";
-      sign[3].dataset.checked = "false";
       design(sign[1]);
-      design(sign[2]);
       removeDesign(sign[0]);
-      removeDesign(sign[3]);
     }
   });
 });
@@ -206,27 +186,16 @@ playBtn.addEventListener("click", (e) => {
   if (first_user_input.value.trim().localeCompare("") == 0) {
     first_user_input.placeholder = "Type your name!";
   }
-  if (second_user_input.value.trim().localeCompare("") == 0) {
-    second_user_input.placeholder = "Type your name!";
-  }
   if (
     first_user_input.value.trim().localeCompare("") != 0 &&
-    second_user_input.value.trim().localeCompare("") != 0 &&
-    first_user_input.value.trim().length <= 7 &&
-    second_user_input.value.trim().length <= 7
+    first_user_input.value.trim().length <= 7
   ) {
     inputContainer.style.display = "none";
     user_1.innerHTML = first_user_input.value;
-    user_2.innerHTML = second_user_input.value;
-    //   time_func();
   }
   if (first_user_input.value.trim().length > 7) {
     first_user_input.value = "";
     first_user_input.placeholder = "Max 7 Characters!!";
-  }
-  if (second_user_input.value.trim().length > 7) {
-    second_user_input.value = "";
-    second_user_input.placeholder = "Max 7 Characters!!";
   }
 
   if (sign[0].dataset.checked.localeCompare("true") == 0) {
@@ -242,8 +211,10 @@ playBtn.addEventListener("click", (e) => {
   }
   if(!isObj1){
     computerRun();
-
   }
+});
+backBtn.addEventListener("click", (e)=>{
+  window.location.href = "./index.html";
 });
 playAgain.addEventListener("mouseup", (e) => {
   playAgain.style.transform = "translate(0px,-2px)";
@@ -257,11 +228,13 @@ backWinner.addEventListener("mouseup", (e) => {
 backWinner.addEventListener("mousedown", (e) => {
   backWinner.style.transform = "translate(0px,2px)";
 });
+backWinner.addEventListener("click", (e)=>{
+  window.location.href = "./index.html";
+});
 playAgain.addEventListener("click", (e) => {
   winnerContainer.style.zIndex = "-4";
   winnerCard.style.opacity = "0";
   clear();
-  // time_func();
 });
 function crossArray(selectedbox, user) {
   let output = [];
@@ -318,7 +291,6 @@ function crossArray(selectedbox, user) {
       break;
     }
   }
-  console.log(output);
 }
 
 function check(crossedLine, user, diff_row, diff_col) {
@@ -373,7 +345,7 @@ function crossLine(user, row, col, rotate, lineWidth) {
   lineDiv.style.width = `${lineWidth}px`;
   lineDiv.style.top = `${top + height / 2}px`;
   lineDiv.style.left = `${left + width / 2 - lineWidth / 2}px`;
-  console.log(left - width, top + height / 2, height, width);
+  // console.log(left - width, top + height / 2, height, width);
   lineDiv.style.transform = `rotate(${rotate}deg)`;
   winnerfound(user, 0);
 }
@@ -384,7 +356,6 @@ function resetGame() {
   score_1.innerHTML = score1;
   score_2.innerHTML = score2;
   clearInterval(interval);
-  // time_func();
   isObj1 = true;
   clear();
 }
@@ -415,7 +386,7 @@ function clear() {
 function winnerfound(user, draw) {
   winnerContainer.style.zIndex = "4";
   winnerCard.style.opacity = "1";
-  console.log(user);
+  // console.log(user);
   if (draw == 1) {
     winnerHead.innerHTML = "DRAW!";
   } else {
@@ -426,72 +397,9 @@ function winnerfound(user, draw) {
 // console.log(lineDiv.getBoundingClientRect().top);
 // console.log(lineDiv.getBoundingClientRect().left);
 
-function time_func() {
-  if (isObj1 == true) {
-    rect[0].style.visibility = "visible";
-    rect[1].style.visibility = "hidden";
-  } else {
-    rect[0].style.visibility = "hidden";
-    rect[1].style.visibility = "visible";
-  }
-  if (wins == false) {
-    //   timer();
-  } else {
-    rect[0].style.visibility = "hidden";
-    rect[1].style.visibility = "hidden";
-  }
-}
-function timer() {
-  s = 11;
-  interval = setInterval(() => {
-    s--;
-    if (wins == true) {
-      rect[0].style.visibility = "hidden";
-      rect[1].style.visibility = "hidden";
-      clearInterval(interval);
-    }
-    if (s >= 0) {
-      timeSpan.innerHTML = `${s}s`;
-    } else {
-      timeSpan.innerHTML = "Times Up!";
-      sleep = true;
-      isObj1 = isObj1 ? false : true;
-      clearInterval(interval);
-      // timesUp();
-    }
-    if (isObj1 == true && s >= 0 && wins == false) {
-      rect[0].style.transition = "all 1s linear";
-      rect[0].style.strokeDashoffset = 593 - (593 / 10) * (10 - s);
-      rect[1].style.strokeDashoffset = 593;
-      rect[1].style.transition = "all 0s linear";
-    } else if (s >= 0 && wins == false) {
-      rect[1].style.transition = "all 1s linear";
-      rect[0].style.strokeDashoffset = 593;
-      rect[1].style.strokeDashoffset = 593 - (593 / 10) * (10 - s);
-      rect[0].style.transition = "all 0s linear";
-    }
-  }, 1000);
-}
-function timesUp() {
-  setTimeout(() => {
-    sleep = false;
-    if (!isObj1) {
-      console.log("true:  1");
-      rect[0].style.visibility = "hidden";
-      rect[1].style.visibility = "visible";
-    } else {
-      console.log("true:  2");
-      rect[0].style.visibility = "visible";
-      rect[1].style.visibility = "hidden";
-    }
-    clearInterval(interval);
-    //   timer();
-  }, 3000);
-}
-
 function computerClick() {
   // console.log("computer clicked", option);
-  if (wins == false && sleep == false) {
+  if (wins == false && sleep == false && (obj1.selectedbox.length + obj2.selectedbox.length < 9) ) {
     row = option[0][0];
     col = option[0][1];
     box[(row-1)*3+col-1].dataset.clicked = "true";
@@ -502,18 +410,29 @@ function computerClick() {
     option = [];
     nextMoveDone = false;
     nextMoveFound = false;
-    // time_func();
+    probableChosenList = new Map([]);
+    elCount = new Map([]);
+    hasElementInSelectedbox1 = false;
+    hasElementInSelectedbox2 = false;
+    trickfordef = false;
+    count = 0;
+    index = 0;
+    n = 0;
+    countSelectedbox1 = 0; 
+    countSelectedbox2 = 0;
+    nextMoveFoundDef = new Map([["0", false],["1", false],["2", false],["3", false],["4", false],["5", false],["6", false],["7", false],]);
+    nextMoveFoundAtk = new Map([["0", false],["1", false],["2", false],["3", false],["4", false],["5", false],["6", false],["7", false],]);
     if (obj2.selectedbox.length >= 3) {
       crossArray(obj2.selectedbox, obj2.name);
     }
   }
 }
 
-function computerRun(){
+async function computerRun(){
   if((obj1.selectedbox.length+obj2.selectedbox.length+1) == 1){
     n = Math.floor(Math.random()*cornerBoxes.length);
     option.push(cornerBoxes[n]);
-    // console.log(option);
+    console.log(option);
     nextMoveDone = true;
   }
   else if((obj1.selectedbox.length+obj2.selectedbox.length+1) == 3){
@@ -562,14 +481,13 @@ function computerRun(){
   else if((obj1.selectedbox.length+obj2.selectedbox.length+1)==2){
     if(inSelectedbox(obj1.selectedbox[0], cornerBoxes)){
       option.push([2, 2]);
-      console.log(option);
+      // console.log(option);
       nextMoveDone =true;
     }
   }
   else if((obj1.selectedbox.length+obj2.selectedbox.length+1) == 4){
-    console.log("444")
     checkAtkDef();
-    console.log(option);
+    // console.log(option);
     if(inSelectedbox(obj1.selectedbox[1], cornerBoxes && !nextMoveDone)){
       n = Math.floor(Math.random()*cornerBoxes.length);
       option.push(cornerBoxes[n]);
@@ -577,14 +495,13 @@ function computerRun(){
       nextMoveDone = true;
     }
   }
-  if(!nextMoveDone){
+  if(!nextMoveDone && (obj1.selectedbox.length + obj2.selectedbox.length < 9)){
     checkAtkDef();
     if (!nextMoveFound && probableChosenList.size!=0) {
       for (let i = 0; i < probableChosenList.size; i++) {
         // console.log("probable", crossedList[probableChosenList.get(`${i}`)]);
         count = 0;
         // console.log(crossedList[probableChosenList.get(`${i}`)], i);
-    
         for (let p = 0;p < crossedList[probableChosenList.get(`${i}`)].length;p++) {
     
           for (let q = 0; q < obj2.selectedbox.length; q++) {
@@ -623,6 +540,7 @@ function computerRun(){
       nextMoveFound = true;
     }
   }
+  await sleep_time(1000);
   computerClick();
 }
 function nextMove(chosenList) {
@@ -636,6 +554,7 @@ function nextMove(chosenList) {
     if (hasElementInSelectedbox1 == false && hasElementInSelectedbox2 == false) {
       option.push(chosenList[i]);
       nextMoveDone = true;
+      // console.log(option);
     }
   }
   if(option.length>=2){
@@ -685,6 +604,32 @@ function inSelectedbox(element, selectedbox){
   return false;
 }
 
+function emptyBox(){
+  let inTheBox = false;
+  for(let i=0;i<crossedList.length;i++){
+    for (let j = 0; j < crossedList[i].length; j++) {
+      inTheBox = false;
+      for (let k = 0; k < obj1.selectedbox.length; k++) {
+  
+        if (crossedList[i][j].toString().localeCompare(obj1.selectedbox[k].toString()) == 0) {
+          inTheBox = true;
+          break;
+        }
+      }
+      if(!inTheBox){
+        for (let k = 0; k < obj2.selectedbox.length; k++){
+          if(crossedList[i][j].toString().localeCompare(obj2.selectedbox[k].toString()) == 0){
+            inTheBox = true;
+            break;
+          }
+        }
+      }
+      if(!inTheBox){
+        return crossedList[i][j];
+      }
+    }
+  }
+}
 function checkAtkDef(){
   for (let i = 0; i < crossedList.length; i++) {
     countSelectedbox1 = 0;
@@ -715,11 +660,12 @@ function checkAtkDef(){
       index++;
     }
   }
+  // console.log("size", probableChosenList);
   // first, checking if there is any wining move
   if(!nextMoveFound){
     for(let j=0;j<8;j++){
       if(nextMoveFoundAtk.get(`${j}`)==true){
-        console.log("attacking");
+        // console.log("attacking");
         nextMove(crossedList[j]);
       }
       if(nextMoveFound){
@@ -731,7 +677,7 @@ function checkAtkDef(){
     // checking if there is any wining move of the opponent that need to be defensed
     for(let j=0;j<8;j++){
       if(nextMoveFoundDef.get(`${j}`)==true){
-        console.log("defensing");
+        // console.log("defensing");
         nextMove(crossedList[j]);
       }
       if(nextMoveFound){
@@ -739,4 +685,8 @@ function checkAtkDef(){
       }
     }
   }
+}
+
+function sleep_time(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }

@@ -68,19 +68,6 @@
     /* border: 2px #ffadad solid; */
     z-index: 1;
   }
-  .timeCard {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 2em;
-    color: white;
-    background-color: rgb(198, 10, 41, 0.8);
-    height: 100px;
-    width: 250px;
-    margin: 10px 20px;
-    border-radius: 20px;
-    border: 2px #ffadad solid;
-  }
   svg {
     /* display: flex;
     align-items: center;
@@ -298,7 +285,7 @@
     width: 400px;
     height: 430px;
     border: 3px #efefef groove;
-    background: url(./images/winner_bg_1_1.jpg) no-repeat center fixed;
+    background: url(./images/result_bg.jpg) no-repeat center fixed;
     background-size: contain;
     color: #ba0000;
     border-radius: 20px;

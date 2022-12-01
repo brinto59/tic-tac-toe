@@ -161,17 +161,24 @@ playBtn.addEventListener("click", (e) => {
     user_2_sign_span.innerHTML = "X";
   }
 });
+backBtn.addEventListener("click", (e)=>{
+  window.location.href = "./index.html";
+});
 playAgain.addEventListener("mouseup", (e) => {
   playAgain.style.transform = "translate(0px,-2px)";
 });
 playAgain.addEventListener("mousedown", (e) => {
   playAgain.style.transform = "translate(0px,2px)";
 });
+
 backWinner.addEventListener("mouseup", (e) => {
   backWinner.style.transform = "translate(0px,-2px)";
 });
 backWinner.addEventListener("mousedown", (e) => {
   backWinner.style.transform = "translate(0px,2px)";
+});
+backWinner.addEventListener("click", (e)=>{
+  window.location.href = "./index.html";
 });
 playAgain.addEventListener("click", (e) => {
   winnerContainer.style.zIndex = "-4";

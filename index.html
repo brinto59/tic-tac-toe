@@ -9,84 +9,37 @@
   </head>
   <body>
     <div class="container">
-      <div class="nav">
-        <div class="playerCard">
-          <div>User-1:<span id="user_1">user9</span></div>
-          <div>Score:<span id="score_1">0</span></div>
-          <div>Sign: <span id="user_1_sign">X</span></div>
-          <svg>
-            <rect x="10" y="10" rx="20" ry="20" class="rectangular" id ="rect1"/>
-          </svg>
-        </div>
-        <div class="timeCard">
-          <div class="timeSpan">01:00</div>
-        </div>
-        <div class="playerCard">
-          <div>User-2:<span id="user_2">user7</span></div>
-          <div>Score:<span id="score_2">0</span></div>
-          <div>Sign: <span id="user_2_sign">O</span></div>
-          <svg>
-            <rect x="10" y="10" rx="20" ry="20" class="rectangular" id="rect2"/>
-          </svg>
-        </div>
-        
+      <div class="section_1">
+        <div class="stick stick_1"></div>
+        <div class="stick stick_2"></div>
+        <div class="stick stick_3"></div>
+        <!-- <div class="stick stick_9"></div> -->
+        <div class="stick stick_4"></div>
+        <svg class="box box_1">
+          <line x1="15" y1="10" x2="62" y2="65" class="line_1"></line>
+          <line x1="62" y1="10" x2="15" y2="65" class="line_2"></line>
+        </svg>
+        <svg class="box box_2">
+          <circle cx="37.5" cy="38.5" r="24" />
+        </svg>
       </div>
-      <div class="main-body">
-        <div class="box" data-row="1" data-col="1" data-clicked="false"></div>
-        <div class="box" data-row="1" data-col="2" data-clicked="false"></div>
-        <div class="box" data-row="1" data-col="3" data-clicked="false"></div>
-        <div class="box" data-row="2" data-col="1" data-clicked="false"></div>
-        <div class="box" data-row="2" data-col="2" data-clicked="false"></div>
-        <div class="box" data-row="2" data-col="3" data-clicked="false"></div>
-        <div class="box" data-row="3" data-col="1" data-clicked="false"></div>
-        <div class="box" data-row="3" data-col="2" data-clicked="false"></div>
-        <div class="box" data-row="3" data-col="3" data-clicked="false"></div>
-        <div class="line"></div>
-      </div>
-      <div id="reset">Reset</div>
-    </div>
-    <div class="input-container">
-      <div class="card">
-        <div class="head">Tic-Tac-Toe</div>
-        <div class="user user-1">
-          <div class="user-input">
-            <label for="user-1-name">First User Name:</label>
-            <input type="text" id="user-1-name"/>
-          </div>
-          <div class="X-O">
-            <div class="X X-1 sign" data-checked="true">X</div>
-            <div class="O O-1 sign" data-checked="false">O</div>
-          </div>
-        </div>
-        <div class="user user-2">
-          <div class="user-input">
-            <label for="user-2-name">Second User Name:</label>
-            <input type="text" id="user-2-name"/>
-          </div>
-          <div class="X-O">
-            <div class="X X-2 sign" data-checked="false">X</div>
-            <div class="O O-2 sign" data-checked="true">O</div>
-          </div>
-        </div>
-        <div class="button">
-          <div class="play btn">Play</div>
-          <div class="back btn">Back</div>
+      <div class="section_2">
+        <div class="card">
+          <h1 class="header">Tic Tac Toe</h1>
+          <div class="playfriend btn">Play with a Friend</div>
+          <div class="playcomputer btn">Play with Computer</div>
         </div>
       </div>
     </div>
-    <div class="winner-container">
-      <div class="winner_card">
-        <div class="head_button">
-          <div class="head_winner">
-            Winnner:<span class="winner-name">user-1</span>
-          </div>
-          <div class="button">
-            <div class="playagain btn_winner">Play Again</div>
-            <div class="back_winner btn_winner">Back</div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <script defer src="./index.js"></script>
+    <script>
+      const playFriendBtn = document.querySelector(".playfriend");
+      const playcomputerBtn = document.querySelector(".playcomputer");
+      playFriendBtn.addEventListener("click", (e)=>{
+        window.location.href = "./playWithFriend.html";
+      });
+      playcomputerBtn.addEventListener("click", (e)=>{
+        window.location.href = "./playWithComputer.html";
+      });
+    </script>
   </body>
 </html>
