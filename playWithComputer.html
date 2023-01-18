@@ -5,8 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tic-Tac-Toe</title>
-    <link rel="stylesheet" href="./playWithComputerStyle.css">
-    <link rel="shortcut icon" href="./images/logo.jpg" type="image/x-icon">
+    <link rel="stylesheet" href="./playWithComputerStyle.css" />
+    <link rel="shortcut icon" href="./images/logo.jpg" type="image/x-icon" />
   </head>
   <body>
     <div class="container">
@@ -16,7 +16,14 @@
           <div>Score:<span id="score_1">0</span></div>
           <div>Sign: <span id="user_1_sign">X</span></div>
           <svg>
-            <rect x="10" y="10" rx="20" ry="20" class="rectangular" id ="rect1"/>
+            <rect
+              x="10"
+              y="10"
+              rx="20"
+              ry="20"
+              class="rectangular"
+              id="rect1"
+            />
           </svg>
         </div>
         <div class="playerCard">
@@ -24,10 +31,16 @@
           <div>Score:<span id="score_2">0</span></div>
           <div>Sign: <span id="user_2_sign">O</span></div>
           <svg>
-            <rect x="10" y="10" rx="20" ry="20" class="rectangular" id="rect2"/>
+            <rect
+              x="10"
+              y="10"
+              rx="20"
+              ry="20"
+              class="rectangular"
+              id="rect2"
+            />
           </svg>
         </div>
-        
       </div>
       <div class="main-body">
         <div class="box" data-row="1" data-col="1" data-clicked="false"></div>
@@ -49,7 +62,7 @@
         <div class="user user-1">
           <div class="user-input">
             <label for="user-1-name">First User Name:</label>
-            <input type="text" id="user-1-name"/>
+            <input type="text" id="user-1-name" />
           </div>
           <div class="X-O">
             <div class="X X-1 sign" data-checked="true">X</div>
@@ -65,9 +78,7 @@
     <div class="winner-container">
       <div class="winner_card">
         <div class="head_button">
-          <div class="head_winner">
-            Winnner:<span class="winner-name">user-1</span>
-          </div>
+          <div class="head_winner"></div>
           <div class="button">
             <div class="playagain btn_winner">Play Again</div>
             <div class="back_winner btn_winner">Back</div>
