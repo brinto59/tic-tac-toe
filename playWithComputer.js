@@ -346,7 +346,6 @@ function crossLine(user, row, col, rotate, lineWidth) {
   lineDiv.style.left = `${left + width / 2 - lineWidth / 2}px`;
   // console.log(left - width, top + height / 2, height, width);
   lineDiv.style.transform = `rotate(${rotate}deg)`;
-  console.log(user, "Basob paul brinto");
   winnerfound(user, 0);
 }
 
@@ -386,7 +385,6 @@ function clear() {
 function winnerfound(user, draw) {
   winnerContainer.style.zIndex = "4";
   winnerCard.style.opacity = "1";
-  console.log(user);
   if (draw == 1) {
     winnerHead.innerHTML = "DRAW!";
   } else {
